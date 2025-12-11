@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Construction Planner</title>
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Icons -->
+    <script src="https://unpkg.com/feather-icons"></script>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .login-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: var(--shadow-glass);
+        }
+
+        .login-title {
+            text-align: center;
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+        }
+
+        .login-subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-card">
+        <div class="login-title">Construction Planner</div>
+        <div class="login-subtitle">Sign in to manage your projects</div>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label>Select Role</label>
+                <select name="role" id="role" required>
+                    <option value="Manager">Manager</option>
+                    <option value="Site Engineer">Site Engineer</option>
+                    <option value="Client">Client</option>
+                    <option value="Labour">Labour</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" name="password" id="password" placeholder="Enter password" required>
+            </div>
+
+            <div id="errorMsg"
+                style="color: #ef4444; font-size: 0.85rem; margin-bottom: 1rem; display: none; text-align: center;">
+                Invalid credentials.
+            </div>
+
+            <button type="submit" class="btn-primary" style="width: 100%; justify-content: center;">
+                Sign In <i data-feather="arrow-right" width="16" style="margin-left: 8px;"></i>
+            </button>
+        </form>
+
+        <div
+            style="margin-top: 1.5rem; border-top: 1px solid var(--border-glass); padding-top: 1rem; font-size: 0.8rem; color: var(--text-muted);">
+            <p><strong>Demo Credentials:</strong></p>
+            <ul style="padding-left: 1.2rem; margin-top: 0.5rem; line-height: 1.6;">
+                <li>Manager: <code>admin123</code></li>
+                <li>Engineer: <code>site123</code></li>
+                <li>Client: <code>client123</code></li>
+                <li>Labour: <code>labour123</code></li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script>
+        feather.replace();
+
+        // Clear session on login page load
+        if (window.location.pathname.includes('index.html') || window.location.pathname.endsWith('/')) {
+            sessionStorage.removeItem('cp_session');
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const role = document.getElementById('role').value;
+            const pass = document.getElementById('password').value;
+
+            if (login(role, pass)) {
+                // Success
+                window.location.href = 'dashboard.html';
+            } else {
+                // Fail
+                const err = document.getElementById('errorMsg');
+                err.style.display = 'block';
+                err.textContent = "Invalid password for " + role;
+            }
+        });
+    </script>
+</body>
+
+</html>
